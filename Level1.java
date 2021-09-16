@@ -16,5 +16,13 @@ public class Level1 extends World
     {    
         // Create a new world with 1200x800 cells with a cell size of 1x1 pixels.
         super(1200, 800, 1, false); 
+        prepare();
+    }
+
+    private void  prepare()
+    {
+        setPaintOrder(Player.class, Platforms.class, Obstacle.class, Collectables.class,
+            Door.class, HUD.class);
+        
     }
 }
