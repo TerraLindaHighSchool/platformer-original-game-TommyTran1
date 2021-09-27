@@ -51,8 +51,11 @@ public class Player extends Actor
      */
     public void act()
     {
-        animator();
-        move(speed);
+        walk();
+        jump();
+        fall();
+        onCollision();
+        gameOver();
     }
 
     public void addedToWorld(World world)
@@ -62,12 +65,50 @@ public class Player extends Actor
 
     public void walk() 
     {
+        if(isWalking = true) {
+            animator();
+        }
+        else 
+        {
+            setImage(STANDING_IMAGE);
+            walkIndex = 0;
+        }
+
+        if(Greenfoot.isKeyDown("right"))
+        {
+            if(isFacingLeft)
+            {
+                mirrorImages();
+            }
+            isWalking = true;
+            isFacingLeft = false;
+            move(speed);
+        }
+
+        if(Greenfoot.isKeyDown("left"))
+        {
+            if(!isFacingLeft)
+            {
+                mirrorImages();
+            }
+            isWalking = true;
+            isFacingLeft = true;
+            move(-speed);
+        }
+
+        if(!(Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("left")))
+        {
+            isWalking = false;
+        }
 
     }
 
     public void jump()
     {
-
+        if(Greenfoot.isKeyDown("space"))
+        {
+            isJumping = true;
+        }
     }
 
     public void fall()
