@@ -105,15 +105,30 @@ public class Player extends Actor
 
     public void jump()
     {
-        if(Greenfoot.isKeyDown("space"))
+        if(Greenfoot.isKeyDown("space") && isOnGround())
         {
             isJumping = true;
+            yVelocity = JUMP_FORCE;
+        }
+
+        if(isJumping && yVelocity > 0.0)
+        {
+            setLocation(getX(), getY() - (int) yVelocity);
+            yVelocity -= GRAVITY;
+        }
+        else
+        {
+            isJumping = false;
         }
     }
 
     public void fall()
     {
-
+        if(!isOnGround() && !isJumping)
+        {
+            setLocation(getX(), getY() - (int) yVelocity);
+            yVelocity -= GRAVITY;
+        }
     }
 
     public void animator()
@@ -135,12 +150,41 @@ public class Player extends Actor
 
     public void onCollision() 
     {
+        if(isTouching(Door.class))
+        {
+            World world = null;
+            try 
+            {
+                world = (World) NEXT_LEVEL.newInstance();
+            }   
+            catch (InstantiationException e) 
+            {
+                System.out.println("Class cannot be instantiated");
+            } catch (IllegalAccessException e) {
+                System.out.println("Cannot access class constructor");
+            } 
+            Greenfoot.setWorld(world);
+        }
+
+        if(isTouching(Obstacle.class))
+        {
+            removeTouching(Obstacle.class);
+        }
+        
+        if(isTouching(Platforms.class) && !isOnGround())
+        {
+            yVelocity = -1;
+            fall();
+        }
 
     }
 
     public void mirrorImages()
     {
-
+        for(int i = 0; i < WALK_ANIMATION.length; i++)
+        {
+            WALK_ANIMATION[i].mirrorHorizontally();
+        }
     }
 
     public void gameOver() 
@@ -150,6 +194,8 @@ public class Player extends Actor
 
     public boolean isOnGround()
     {
-        return false;
+        Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 
+                2, Platforms.class);
+        return ground != null;
     }
 }
