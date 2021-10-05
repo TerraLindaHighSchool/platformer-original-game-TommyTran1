@@ -33,6 +33,8 @@ public class Player extends Actor
         GRAVITY = gravity;
         NEXT_LEVEL = nextLevel;
         MUSIC = music;
+        health = new Health[maxHealth];
+
 
         STANDING_IMAGE = getImage();
         WALK_ANIMATION = new GreenfootImage[]
@@ -58,14 +60,19 @@ public class Player extends Actor
         gameOver();
     }
 
-    public void addedToWorld(World world)
-    {
-
+        public void addedToWorld(World world)
+    {   
+        health[0] = new Health();
+        world.addObject(health[0], 30, 36);
+        health[1] = new Health();
+        world.addObject(health[1], 72, 36);
+        health[2] = new Health();
+        world.addObject(health[2], 114, 36);
     }
 
     public void walk() 
     {
-        if(isWalking = true) {
+        if(isWalking) {
             animator();
         }
         else 
@@ -80,8 +87,8 @@ public class Player extends Actor
             {
                 mirrorImages();
             }
-            isWalking = true;
             isFacingLeft = false;
+            isWalking = true;
             move(speed);
         }
 
@@ -91,12 +98,12 @@ public class Player extends Actor
             {
                 mirrorImages();
             }
-            isWalking = true;
             isFacingLeft = true;
+            isWalking = true;
             move(-speed);
         }
 
-        if(!(Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("left")))
+        if(!(Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right")))
         {
             isWalking = false;
         }
