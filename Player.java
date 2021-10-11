@@ -10,7 +10,7 @@ public class Player extends Actor
 {
     private Health[] health;
     private Powerup[] powerup;
-    private int healthcount;
+    private int healthCount;
     private int speed;
     private int walkIndex;
     private int frame;
@@ -33,8 +33,8 @@ public class Player extends Actor
         GRAVITY = gravity;
         NEXT_LEVEL = nextLevel;
         MUSIC = music;
-        health = new Health[maxHealth];
-
+        healthCount = 3;
+        health = new Health[healthCount];
 
         STANDING_IMAGE = getImage();
         WALK_ANIMATION = new GreenfootImage[]
@@ -60,14 +60,15 @@ public class Player extends Actor
         gameOver();
     }
 
-        public void addedToWorld(World world)
+    public void addedToWorld(World world)
     {   
-        health[0] = new Health();
-        world.addObject(health[0], 30, 36);
-        health[1] = new Health();
-        world.addObject(health[1], 72, 36);
-        health[2] = new Health();
-        world.addObject(health[2], 114, 36);
+        {  
+            for(int i = 0; i < health.length; i++)
+            {
+                health[i] = new Health();
+                world.addObject(health[i], 30 + 42 * i, 36);
+            }
+        }
     }
 
     public void walk() 
@@ -83,6 +84,10 @@ public class Player extends Actor
 
         if(Greenfoot.isKeyDown("right"))
         {
+            if(!MUSIC.isPlaying())
+            {
+                MUSIC.playLoop();
+            }
             if(isFacingLeft)
             {
                 mirrorImages();
@@ -90,6 +95,7 @@ public class Player extends Actor
             isFacingLeft = false;
             isWalking = true;
             move(speed);
+
         }
 
         if(Greenfoot.isKeyDown("left"))
@@ -116,6 +122,7 @@ public class Player extends Actor
         {
             isJumping = true;
             yVelocity = JUMP_FORCE;
+            Greenfoot.playSound("jump.wav");
         }
 
         if(isJumping && yVelocity > 0.0)
@@ -170,14 +177,34 @@ public class Player extends Actor
             } catch (IllegalAccessException e) {
                 System.out.println("Cannot access class constructor");
             } 
+            Greenfoot.playSound("door_open.wav");
+            MUSIC.stop();
             Greenfoot.setWorld(world);
         }
 
+        if(isTouching(Collectables.class))
+        {
+            removeTouching(Collectables.class);
+            Greenfoot.playSound("collectable.wav");
+        }
         if(isTouching(Obstacle.class))
         {
-            removeTouching(Obstacle.class);
+            if(!(isTouching(TrapDoor.class)))
+            {
+                if(isTouching(Bomb.class))
+                {
+                    Greenfoot.playSound("explosionSmall.wav");
+                }
+                if(isTouching(TrapDoor.class))
+                {
+                }
+                removeTouching(Obstacle.class);
+                getWorld().removeObject(health[healthCount - 1]);
+                healthCount--;
+            }
+
         }
-        
+
         if(isTouching(Platforms.class) && !isOnGround())
         {
             yVelocity = -1;
@@ -196,7 +223,10 @@ public class Player extends Actor
 
     public void gameOver() 
     {
-
+        if(healthCount == 0)
+        {
+            Greenfoot.setWorld(new Level1());
+        }
     }
 
     public boolean isOnGround()
