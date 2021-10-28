@@ -21,9 +21,17 @@ public class Rock extends Obstacle
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act()
-    {}
+    {
+        fall();
+    }
 
     protected void fall()
-    {}
+    {
+        if(!isOnGround())
+        {
+            yVelocity += GRAVITY;
+            setLocation(getX(), getY() + (int) yVelocity);
+        }
+    }
 }
 
