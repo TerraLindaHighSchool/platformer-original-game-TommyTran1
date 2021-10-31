@@ -1,13 +1,14 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class MeteorSide here.
+ * Write a description of class MeteorDown here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
 public class MeteorSide extends Obstacle
-{ private float yVelocity;
+{ 
+    private float yVelocity;
     private final float GRAVITY;
 
     public MeteorSide(float gravity)
@@ -20,7 +21,22 @@ public class MeteorSide extends Obstacle
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act()
-    {}
+    {
+        move(3);
+        collision();
+    }
+
+    public void addedToWorld(World world)
+    {      
+    }
+
+    public void collision()
+    {
+        if(isOnGround())
+        {
+            getWorld().removeObject(this);
+        }
+    }
 
     protected void fall()
     {}

@@ -40,7 +40,7 @@ public class Level1 extends World
         addObject(new Door(), 1175, 45);
         Player player = new Player(SPEED, JUMP_FORCE, GRAVITY, 
                 MAX_HEALTH, MAX_POWERUP, NEXT_LEVEL, MUSIC);
-        addObject(player, 70, 700);
+        addObject(player, 70, 760);
         addObject(new Floor(), 600, 800);
         BrickWall brickWall = new BrickWall();
         addObject(brickWall,960,104);

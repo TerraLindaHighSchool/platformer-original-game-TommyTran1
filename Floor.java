@@ -14,6 +14,9 @@ public class Floor extends Platforms
      */
     public void act()
     {
-        // Add your action code here.
+        if (Level5.class.isInstance(getWorld()))
+        {
+            setImage("lava.png");
+        }
     }
 }

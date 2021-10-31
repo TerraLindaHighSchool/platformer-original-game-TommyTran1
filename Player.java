@@ -18,12 +18,15 @@ public class Player extends Actor
     private boolean isWalking;
     private boolean isJumping;
     private boolean isFacingLeft;
+    private int numJumps;
+    private final int MAX_JUMPS = 2;
     private final GreenfootImage[] WALK_ANIMATION;
     private final GreenfootImage STANDING_IMAGE;
     private final float JUMP_FORCE;
     private final float GRAVITY;
     private final Class NEXT_LEVEL;
     private final GreenfootSound MUSIC;
+    private final boolean DOUBLE_JUMP = true;
 
     public Player (int speed, float jumpForce, float gravity, int maxHealth,int maxPowerup,
     Class nextLevel, GreenfootSound music)
@@ -47,6 +50,7 @@ public class Player extends Actor
         };
     }
 
+    boolean doubleJump = false;
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -63,6 +67,10 @@ public class Player extends Actor
     public void addedToWorld(World world)
     {   
         {  
+            if (Level3.class.isInstance(getWorld()) || Level4.class.isInstance(getWorld()) || Level5.class.isInstance(getWorld()))
+            {
+                doubleJump = true;
+            }
             for(int i = 0; i < health.length; i++)
             {
                 health[i] = new Health();
@@ -118,11 +126,30 @@ public class Player extends Actor
 
     public void jump()
     {
+        if(isOnGround() ) 
+        {
+            numJumps = 0;
+        }
         if(Greenfoot.isKeyDown("space") && isOnGround())
         {
             isJumping = true;
             yVelocity = JUMP_FORCE;
             Greenfoot.playSound("jump.wav");
+            if(numJumps < 2)
+            {
+                numJumps += 1;
+            }
+        }
+
+        if((Greenfoot.isKeyDown("space") && (doubleJump == true)) && (numJumps < 2))
+        {
+            isJumping = true;
+            yVelocity += (JUMP_FORCE/4);
+            Greenfoot.playSound("jump.wav");
+            if(numJumps < 2)
+            {
+                numJumps += 1;
+            }
         }
 
         if(isJumping && yVelocity > 0.0)
@@ -143,6 +170,7 @@ public class Player extends Actor
             setLocation(getX(), getY() - (int) yVelocity);
             yVelocity -= GRAVITY;
         }
+
     }
 
     public void animator()
@@ -161,9 +189,14 @@ public class Player extends Actor
         }
         frame++;
     }
-
+    int cooldown = 0;
     public void onCollision() 
     {
+        if(cooldown > 0) 
+        {
+            cooldown -= 1;
+        }
+
         if(isTouching(Door.class))
         {
             World world = null;
@@ -184,9 +217,26 @@ public class Player extends Actor
 
         if(isTouching(Collectables.class))
         {
+            if(isTouching(Feather.class))
+            {
+                removeTouching(Feather.class);
+                doubleJump = true;
+            }
+            if(isTouching(HealthUp.class))
+            {
+
+            }
             removeTouching(Collectables.class);
             Greenfoot.playSound("collectable.wav");
+
         }
+
+        if(isTouching(Floor.class) && Level5.class.isInstance(getWorld()))
+        {
+            getWorld().removeObject(health[healthCount - 1]);
+            healthCount--;
+        }
+
         if(isTouching(Obstacle.class))
         {
             if(!(isTouching(TrapDoor.class)))
@@ -203,6 +253,15 @@ public class Player extends Actor
                 healthCount--;
             }
 
+        }
+
+        if(isTouching(TrapDoor.class))
+        {
+            if (cooldown == 0)
+            {
+                cooldown = 60; 
+                Greenfoot.playSound("creak.mp3");  
+            }
         }
 
         if(isTouching(Platforms.class) && !isOnGround())

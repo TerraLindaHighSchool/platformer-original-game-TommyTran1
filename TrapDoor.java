@@ -28,6 +28,12 @@ public class TrapDoor extends Obstacle
     {
         if (Level2.class.isInstance(getWorld()))
         {
+            setImage("depthBrick.png");
+        }
+        
+                if (Level3.class.isInstance(getWorld()) || Level4.class.isInstance
+        (getWorld()))
+        {
             setImage("marsBrick.png");
         }
         

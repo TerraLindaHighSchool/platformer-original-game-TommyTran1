@@ -14,6 +14,14 @@ public class Door extends Actor
      */
     public void act()
     {
-        // Add your action code here.
+        level();
+    }
+    
+    public void level()
+    {
+        if (Level5.class.isInstance(getWorld()))
+        {
+            setImage("ruby.png");
+        }
     }
 }

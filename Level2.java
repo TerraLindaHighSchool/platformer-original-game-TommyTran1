@@ -16,7 +16,7 @@ public class Level2 extends World
     private final float JUMP_FORCE = 5.6f;
     private final int MAX_HEALTH = 3;
     private final int MAX_POWERUP = 3;
-    private final Class NEXT_LEVEL = WinSplash.class; 
+    private final Class NEXT_LEVEL = Level3.class; 
     /**
      * Constructor for objects of class BrickWorld.
      * 
@@ -40,13 +40,13 @@ public class Level2 extends World
         addObject(new Door(), 1177,221);
         Player player = new Player(SPEED, JUMP_FORCE, GRAVITY, 
                 MAX_HEALTH, MAX_POWERUP, NEXT_LEVEL, MUSIC);
-        addObject(player, 70, 700);
+        addObject(player, 70, 760);
         addObject(new Floor(), 600, 800);
-        TrapDoor trapDoor = new TrapDoor(3);
-        addObject(trapDoor,1140,436);
+        TrapDoor trapDoor = new TrapDoor(GRAVITY);
+        addObject(trapDoor,1144,611);
         HealthUp healthUp = new HealthUp();
-        addObject(healthUp,1149,397);
-        TrapDoor trapDoor2 = new TrapDoor(3);
+        addObject(healthUp,1153,557);
+        TrapDoor trapDoor2 = new TrapDoor(GRAVITY);
         addObject(trapDoor2,71,632);
         SmBrickWall smBrickWall = new SmBrickWall();
         addObject(smBrickWall,72,454);
@@ -59,50 +59,53 @@ public class Level2 extends World
         addObject(healthUp2,76,405);
         SmBrickWall smBrickWall3 = new SmBrickWall();
         addObject(smBrickWall3,715,77);
-        TrapDoor trapDoor3 = new TrapDoor(3);
+        TrapDoor trapDoor3 = new TrapDoor(GRAVITY);
         addObject(trapDoor3,1139,165);
         SmBrickWall smBrickWall4 = new SmBrickWall();
         addObject(smBrickWall4,1020,163);
         SmBrickWall smBrickWall5 = new SmBrickWall();
         addObject(smBrickWall5,929,163);
         SmBrickWall smBrickWall6 = new SmBrickWall();
-        addObject(smBrickWall6,741,318);
+        addObject(smBrickWall6,589,305);
         SmBrickWall smBrickWall7 = new SmBrickWall();
-        addObject(smBrickWall7,741,533);
-        TrapDoor trapDoor4 = new TrapDoor(3);
+        addObject(smBrickWall7,606,530);
+        TrapDoor trapDoor4 = new TrapDoor(GRAVITY);
         addObject(trapDoor4,920,447);
-        smBrickWall7.setLocation(606,530);
-        smBrickWall6.setLocation(589,305);
-        trapDoor.setLocation(1144,611);
-        healthUp.setLocation(1153,557);
         SmBrickWall smBrickWall8 = new SmBrickWall();
         addObject(smBrickWall8,377,601);
-        Bomb bomb = new Bomb(3);
-        addObject(bomb,381,539);
-        Bomb bomb2 = new Bomb(3);
+        Bomb bomb2 = new Bomb(GRAVITY);
         addObject(bomb2,939,697);
-        Bomb bomb3 = new Bomb(3);
+        Bomb bomb3 = new Bomb(GRAVITY);
         addObject(bomb3,1182,722);
-        Bomb bomb4 = new Bomb(3);
+        Bomb bomb4 = new Bomb(GRAVITY);
         addObject(bomb4,295,748);
         Feather feather = new Feather();
         addObject(feather,95,97);
-        Bomb bomb5 = new Bomb(3);
+        Bomb bomb5 = new Bomb(GRAVITY);
         addObject(bomb5,664,23);
-        TrapDoor trapDoor5 = new TrapDoor(3);
+        TrapDoor trapDoor5 = new TrapDoor(GRAVITY);
         addObject(trapDoor5,415,224);;
+        SmBrickWall smBrickWall9 = new SmBrickWall();
+        addObject(smBrickWall9,377,423);
+        HealthUp healthUp3 = new HealthUp();
+        addObject(healthUp3,779,700);
     }
 
     private void spawn() 
     {
         if(Math.random() < 0.0025)
         {
-            addObject(new Rock(GRAVITY), Greenfoot.getRandomNumber(1200), -30);
+            addObject(new Rock(GRAVITY), Greenfoot.getRandomNumber(1200), 0);
         }
 
-        if(Math.random() < 0.001)
+        if(Math.random() < 0.005)
         {
-            addObject(new AcidRain(GRAVITY), Greenfoot.getRandomNumber(1200), -30);
+            addObject(new MeteorDown(GRAVITY), Greenfoot.getRandomNumber(1200), 0);
+        }
+        
+        if(Math.random() < 0.005)
+        {
+            addObject(new MeteorSide(GRAVITY), 0, Greenfoot.getRandomNumber(800));
         }
     }
 }

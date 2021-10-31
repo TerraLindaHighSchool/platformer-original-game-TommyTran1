@@ -16,14 +16,20 @@ public class SmBrickWall extends Platforms
     {
         level();
     }
-    
+
     public void level()
     {
         if (Level2.class.isInstance(getWorld()))
         {
+            setImage("depthBrick.png");
+        }
+
+        if (Level3.class.isInstance(getWorld()) || Level4.class.isInstance
+        (getWorld()))
+        {
             setImage("marsBrick.png");
         }
-        
+
         if (Level5.class.isInstance(getWorld()))
         {
             setImage("depthBrick.png");
